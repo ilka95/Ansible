@@ -1,0 +1,17 @@
+---
+# tasks file for ansible-vsftpd
+- name: Installing packages
+  package:
+    name: vsftpd
+    state: present
+#- name: Configuring vsftp
+#  template:
+#    src: /etc/vsftpd.conf.j2
+#    dest: /etc/vsftpd.conf
+#    owner: root
+#    group: root
+#    mode: "0644"
+- name: start vsftpd
+  service:
+    name: vsftpd
+    state: started
