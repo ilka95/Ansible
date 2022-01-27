@@ -1,0 +1,30 @@
+# tasks file for ansible-dnsmasq
+---
+- name: Install Dnsmasq
+  package:
+    name: dnsmasq
+    state: present
+  tags: dnsmasq
+
+- name: Set configuration file
+  template:
+    src: etc_dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    validate: 'dnsmasq --test --conf-file=%s'
+  notify: restart dnsmasq
+  tags: dnsmasq
+
+- name: Make sure Dnsmasq is running
+  service:
+    name: dnsmasq
+    state: started
+    enabled: yes
+  tags: dnsmasq
+
+- name: Make sure Dnsmasq is stoped
+  service:
+    name: dnsmasq
+    state: stopped
+    enabled: no
+  tags: dnsmasq
+

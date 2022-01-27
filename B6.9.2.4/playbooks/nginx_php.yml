@@ -1,0 +1,21 @@
+---
+- hosts: test
+  gather_facts: no
+  become: yes
+  vars:
+    this_thing_is_true: true
+  roles:
+   - nginx_php
+
+  tasks:
+   - name: Check NGINX conf
+     shell: ls
+     changed_when: this_thing_is_true
+     notify: Check NGINX configs
+  
+  handlers:
+    - name: Check NGINX configs
+      ansible.builtin.shell: /usr/sbin/nginx -t
+      register: status
+    - debug: msg="{{ status.stdout }}"
+

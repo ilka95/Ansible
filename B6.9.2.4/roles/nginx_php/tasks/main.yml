@@ -1,0 +1,18 @@
+---
+# tasks file for nginx_php
+- name: Install Nginx
+  apt: name=nginx update_cache=yes state=latest
+
+- name: Start Nginx and boot
+  service: name=nginx state=started enabled=yes
+
+- name: Install PHP-FPM
+  apt: name=php-fpm update_cache=yes state=latest
+
+  #- name: Start PHP-FPM
+  #service: name=php-fpm state=started enabled=yes
+
+- name: Get index.php
+  ansible.builtin.shell: wget 192.168.1.244 -q -O - | grep phpinfo
+  register: debug
+- debug: msg="{{ debug.stdout }}"

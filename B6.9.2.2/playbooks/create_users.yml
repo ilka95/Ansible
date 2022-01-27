@@ -1,0 +1,28 @@
+---
+- name: Create Users & Groups
+  hosts: test
+  gather_facts: false
+  tasks:
+    - name: Create group
+      group:
+        name: superusers
+        state: present
+
+    - name: Create Users Task
+      user:
+        name: "{{ item }}"
+        state: present
+        password: password1
+        shell: /bin/bash
+        group: superusers
+      with_items:
+        - user_1
+        - user_2
+
+    - name: Allow 'superusers' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%superusers'
+        line: '%superusers ALL=(ALL) NOPASSWD: ALL'
+        validate: visudo -cf %s
